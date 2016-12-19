@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 画面转换位置移动动画效果      开始向左动画   
+      fromXDelta ： 动画开始时 X坐标位置     
+      toXDelta ：动画结束时 X坐标位置   
+    duration ：动画持续时间--> 
+    <translate android:fromXDelta="100%p" 
+        android:toXDelta="0"  
+        android:duration="500" />    
+   <!-- 渐变透明的动画效果 -->  
+    <alpha android:fromAlpha="0.1" 
+        android:toAlpha="1.0"  
+       	android:duration="500"/>
+</set>

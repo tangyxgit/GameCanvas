@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/gameload01"
+    android:orientation="vertical" >
+<!-- 第一层 -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+                <!-- 1 -->
+                <RelativeLayout
+                    android:id="@+id/rela01"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/setback"
+                    android:padding="1dp"
+                    >
+                    <ImageView
+                        android:id="@+id/civ01"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#000000" />
+                </RelativeLayout>
+                <!-- 2 -->
+                <RelativeLayout
+                    android:id="@+id/rela02"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/setback"
+                    android:padding="1dp"
+                     >
+                     <ImageView
+                        android:id="@+id/civ02"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#000000" />
+                </RelativeLayout>
+            </LinearLayout>
+            <!-- 3 -->
+            <LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:layout_weight="1"
+	            android:orientation="horizontal"
+	       	 	>
+                <RelativeLayout
+	                android:id="@+id/rela03"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:layout_weight="3"
+	                android:background="@drawable/setback"
+                	android:padding="1dp"
+	                >
+	                <ImageView
+		               android:id="@+id/civ03"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000" />
+            	</RelativeLayout>
+            	<RelativeLayout
+	                android:id="@+id/rela04"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:layout_weight="2"
+	                android:background="@drawable/setback"
+                	android:padding="1dp" >
+					<ImageView
+		               android:id="@+id/civ04"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000" />
+            	</RelativeLayout>
+            </LinearLayout>
+            <!-- 5 -->
+            <LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:layout_weight="1"
+	            android:orientation="horizontal" >
+                <RelativeLayout
+	                android:id="@+id/rela05"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:layout_weight="2"
+	                android:background="@drawable/setback"
+                	android:padding="1dp">
+					<ImageView
+		               android:id="@+id/civ05"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000"/>
+            	</RelativeLayout>
+            	<RelativeLayout
+	                android:id="@+id/rela06"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:layout_weight="3"
+	                android:background="@drawable/setback"
+                	android:padding="1dp">
+					<ImageView
+		               android:id="@+id/civ06"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000" />
+            	</RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:layout_weight="1"
+	            android:orientation="horizontal" >
+                <RelativeLayout
+	                android:id="@+id/rela07"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:layout_weight="1"
+	                android:background="@drawable/setback"
+                	android:padding="1dp">
+					<ImageView
+		               android:id="@+id/civ07"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000" />
+            	</RelativeLayout>
+            	<RelativeLayout
+	                android:id="@+id/rela08"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:layout_weight="1"
+	                android:background="@drawable/setback"
+                	android:padding="1dp">
+					<ImageView
+		               android:id="@+id/civ08"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000" />
+            	</RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <!-- 第一层 横向右 -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:orientation="vertical" >
+            <!-- 3 -->
+            <RelativeLayout
+                android:id="@+id/rela09"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/setback"
+                android:padding="1dp">
+            	<ImageView
+		               android:id="@+id/civ09"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000" />
+            </RelativeLayout>
+            <!-- 6 -->
+            <RelativeLayout
+                android:id="@+id/rela10"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/setback"
+               	android:padding="1dp">
+            	<ImageView
+		               android:id="@+id/civ10"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rela11"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/setback"
+                android:padding="1dp">
+            	<ImageView
+		               android:id="@+id/civ11"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rela12"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/setback"
+               	android:padding="1dp">
+            	<ImageView
+		               android:id="@+id/civ12"
+		               android:layout_width="match_parent"
+		               android:layout_height="match_parent"
+		               android:background="#000000" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <!-- 第二层 -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="3"
+        android:orientation="horizontal" >
+        <!-- 7 -->
+        <RelativeLayout
+            android:id="@+id/rela13"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/setback"
+            android:padding="1dp" >
+            <ImageView
+		          android:id="@+id/civ13"
+		          android:layout_width="match_parent"
+		          android:layout_height="match_parent"
+		          android:background="#000000" />
+        </RelativeLayout>
+        <!-- 8 -->
+        <RelativeLayout
+            android:id="@+id/rela14"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/setback"
+            android:padding="1dp" >
+            <ImageView
+		          android:id="@+id/civ14"
+		          android:layout_width="match_parent"
+		          android:layout_height="match_parent"
+		          android:background="#000000" />
+        </RelativeLayout>
+        <!-- 9 -->
+        <RelativeLayout
+            android:id="@+id/rela15"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/setback"
+            android:padding="1dp" >
+            <ImageView
+		          android:id="@+id/civ15"
+		          android:layout_width="match_parent"
+		          android:layout_height="match_parent"
+		          android:background="#000000" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rela16"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/setback"
+            android:padding="1dp" >
+            <ImageView
+		          android:id="@+id/civ16"
+		          android:layout_width="match_parent"
+		          android:layout_height="match_parent"
+		          android:background="#000000" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

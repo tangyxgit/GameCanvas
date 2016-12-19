@@ -1,0 +1,19 @@
+<resources>
+
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- toolbar颜色 -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!-- 状态栏颜色-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- 其他颜色 checkbox 等-->
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- title高度-->
+        <item name="actionBarSize">48dp</item>
+        <item name="actionBarItemBackground">@null</item>
+    </style>
+    <!-- Toolbar-->
+    <style name="AppThemeNoBar" parent="@style/BaseAppTheme">
+
+    </style>
+
+</resources>
