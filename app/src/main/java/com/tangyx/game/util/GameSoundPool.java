@@ -41,6 +41,12 @@ public class GameSoundPool {
 	public void addMusic(int id,int resId,int priority){
 		mSoundMap.put(id, mSoundPool.load(mContext, resId, priority));
 	}
+
+	/**
+	 *
+	 * @param soundId 播发音乐的编号ID map的key
+	 * @param priority 优先级别 多个音乐一起播发的时候
+     */
 	public void play(int soundId,int priority){
 		mSoundPool.play(mSoundMap.get(soundId), mVolume, mVolume, priority, 0, 1f);
 	}

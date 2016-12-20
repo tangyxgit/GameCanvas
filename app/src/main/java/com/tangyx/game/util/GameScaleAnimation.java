@@ -22,7 +22,13 @@ public class GameScaleAnimation implements AnimationListener{
 		scale1.setAnimationListener(this);
 		this.duration = duration;
 	}
-	public GameScaleAnimation(int duration,boolean isbol) {
+
+	/**
+	 *
+	 * @param duration 动画执行的时常
+	 * @param isBol 是否执行结束
+     */
+	public GameScaleAnimation(int duration,boolean isBol) {
 		scale0 = new ScaleAnimation(1, 0, 1, 1, 1, 0.5f, 1, 0);
 		scale1 = new ScaleAnimation(0, 1, 1, 1, 1, 0.5f,100, 0);
 		scale0.setDuration(duration);
@@ -30,18 +36,23 @@ public class GameScaleAnimation implements AnimationListener{
 		scale0.setAnimationListener(this);
 		scale1.setAnimationListener(this);
 		this.duration = duration;
-		this.bol = isbol;
+		this.bol = isBol;
 	}
-	public void startAnima(View civ){
-		stopAnima();
+	public void startAnimation(View civ){
+		stopAnimation();
 		iv = civ;
 		iv.startAnimation(scale0);
 	}
-	public void stopAnima(){
+	public void stopAnimation(){
 		if(iv!=null){
 			iv.clearAnimation();
 		}
 	}
+
+	/**
+	 * 动画执行完成
+	 * @param animation
+     */
 	@Override
 	public void onAnimationEnd(Animation animation) {
 		if(!bol){

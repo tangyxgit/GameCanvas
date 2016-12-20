@@ -68,7 +68,7 @@ public class SceneActivity extends BaseHomeActivity implements OnClickListener{
 		if(!isAnimation){
 			GameSoundPool.getInstance(this).play(GameSoundPool.GAMECLICK,100);
 			isAnimation = true;
-			mScaleAnimation.startAnima(v);
+			mScaleAnimation.startAnimation(v);
 			intent = new Intent(this,GameMapActivityView.class);
 			intent.putExtra(getString(R.string.select), v.getId());
 			intent.putExtra(getString(R.string.type), this.getIntent().getIntExtra(getString(R.string.type), R.drawable.player0));

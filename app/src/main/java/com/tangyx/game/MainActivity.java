@@ -77,10 +77,10 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.start:
-			AnimaCilck(mStart,0);
+			AnimationClick(mStart,0);
 			break;
 		case R.id.end:
-			AnimaCilck(mQuit,2);
+			AnimationClick(mQuit,2);
 			break;
 		case R.id.playo:
 			selectPlayer(mPlayer1);
@@ -104,7 +104,7 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 				break;
 			case 1:
 				if(!mGameAnimation.isBol()){
-					mGameAnimation.stopAnima();
+					mGameAnimation.stopAnimation();
 				}else{
 					hander.sendEmptyMessage(1);
 				}
@@ -126,13 +126,15 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 		};
 	};
 	/**
+	 * 点击控件的翻转效果
 	 */
-	private void AnimaCilck(View iv,int type){
+	private void AnimationClick(View iv, int type){
 		iv.clearAnimation();
 		mGameAnimation.setBol(true);
 		mGameAnimation.scale0.setDuration(100);
 		mGameAnimation.scale1.setDuration(100);
-		mGameAnimation.startAnima(iv);
+		mGameAnimation.startAnimation(iv);
+		//动画执行后的操作
 		hander.sendEmptyMessage(type);
 	}
 	@Override
