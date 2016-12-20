@@ -5,7 +5,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.ScaleAnimation;
 /**
- *子弹发出的动画
+ * 按钮点击反转的动画效果。
  */
 public class GameScaleAnimation implements AnimationListener{
 	public ScaleAnimation scale0;

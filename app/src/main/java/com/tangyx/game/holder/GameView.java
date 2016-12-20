@@ -5,6 +5,7 @@ import android.view.SurfaceView;
 
 /**
  * Created by tangyx on 2016/12/19.
+ *
  */
 
 public class GameView extends SurfaceView {

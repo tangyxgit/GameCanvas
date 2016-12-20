@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 
 /**
+ * Create tangyx 2016/12/20
  * 背景音乐
  */
 public class GameMusic implements OnCompletionListener{
@@ -29,10 +30,15 @@ public class GameMusic implements OnCompletionListener{
 		mMediaPlayer = new MediaPlayer();
 	}
 
+	/**
+	 * 准备好播放的音乐资源
+	 * @param musicName
+     */
 	public void prepareMediaPlayer(String musicName){
 		mMediaPlayer.setOnCompletionListener(this);
 		AssetFileDescriptor descriptor;
 		try {
+			//音乐文件在assets文件夹下
 			descriptor = mContext.getAssets().openFd("dj/"+musicName);
 			if(descriptor!=null){
 				mMediaPlayer.reset();
@@ -45,20 +51,11 @@ public class GameMusic implements OnCompletionListener{
 			e.printStackTrace();
 		}
 	}
-	public void prepareMediaPlayer(AssetFileDescriptor descriptor){
-		try {
-			if(descriptor!=null){
-				mMediaPlayer.release();
-				mMediaPlayer.reset();
-				mMediaPlayer.setDataSource(descriptor.getFileDescriptor(),descriptor.getStartOffset(),descriptor.getDeclaredLength());
-				mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-				descriptor.close();
-				mMediaPlayer.prepare();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+
+	/**
+	 * 播放音乐
+	 * @param loop
+     */
 	public void play(boolean loop){
 		if(mMediaPlayer !=null){
 			mMediaPlayer.setLooping(loop);
@@ -66,16 +63,28 @@ public class GameMusic implements OnCompletionListener{
 			isPlay =true;
 		}
 	}
+
+	/**
+	 * 停止音乐
+	 */
 	public void stop(){
 		if(mMediaPlayer !=null&& isPlay){
 			mMediaPlayer.stop();
 		}
 	}
+
+	/**
+	 * 暂停音乐
+	 */
 	public void pause(){
 		if(mMediaPlayer !=null&& isPlay){
 			mMediaPlayer.pause();
 		}
 	}
+
+	/**
+	 * 暂停后继续播放
+	 */
 	public void start(){
 		if(mMediaPlayer !=null){
 			mMediaPlayer.start();
@@ -84,14 +93,6 @@ public class GameMusic implements OnCompletionListener{
 	}
 	public void restart(){
 		mMediaPlayer.seekTo(0);
-	}
-	public void onPause(){
-		if(mMediaPlayer !=null){
-			if(mMediaPlayer.isPlaying()){
-				mMediaPlayer.pause();
-				isResume = true;
-			}
-		}
 	}
 	public void onResume(){
 		if(mMediaPlayer !=null){
@@ -102,7 +103,10 @@ public class GameMusic implements OnCompletionListener{
 		}
 	}
 	@Override
-	public void onCompletion(MediaPlayer mp) {//�ͷ���Դ
+	public void onCompletion(MediaPlayer mp) {
+		/**
+		 * 释放资源
+		 */
 		mp.release();
 	}
 }

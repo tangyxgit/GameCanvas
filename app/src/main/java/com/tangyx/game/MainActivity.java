@@ -23,7 +23,7 @@ import com.tangyx.game.util.GameSoundPool;
 public class MainActivity extends BaseHomeActivity  implements OnClickListener,OnTouchListener,AnimationListener{
 	private final static int ClickColor=Color.BLUE;
 	private TextView mStart, mAbout, mQuit;
-	private ImageView mPlayer1, mPlayer1Bullet, mPlayer2, mPlayer2Bullet;
+	private ImageView mPlayer1, mPlayer2, mPlayer1Bullet, mPlayer2Bullet;
 	private TranslateAnimation mTranslateAnimation;
 	private GameScaleAnimation mGameAnimation;
 	private boolean mPlayerBullet;
@@ -33,12 +33,12 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		ViewGroup root = getAllView(this);
-		FontManager(root, this);
+		FontManager(root);
 		mStart = (TextView) findViewById(R.id.start);
 		mAbout = (TextView) findViewById(R.id.me);
 		mQuit = (TextView) findViewById(R.id.end);
 		mPlayer1 = (ImageView) findViewById(R.id.playo);
-		mPlayer1Bullet = (ImageView) findViewById(R.id.playt);
+		mPlayer2 = (ImageView) findViewById(R.id.playt);
 		mStart.setOnClickListener(this);
 		mStart.setOnTouchListener(this);
 		mStart.setTextColor(ClickColor);
@@ -49,8 +49,8 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 		mQuit.setOnTouchListener(this);
 		mQuit.setTextColor(ClickColor);
 		mPlayer1.setOnClickListener(this);
-		mPlayer1Bullet.setOnClickListener(this);
-		mPlayer2 = (ImageView) findViewById(R.id.pb0);
+		mPlayer2.setOnClickListener(this);
+		mPlayer1Bullet = (ImageView) findViewById(R.id.pb0);
 		mPlayer2Bullet = (ImageView) findViewById(R.id.pb1);
 		mGameAnimation = new GameScaleAnimation(1000);
 		GameMusic.getInstance(this).prepareMediaPlayer(getString(R.string.menumusic));
@@ -58,16 +58,18 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 		mType = R.id.playo;
 		GameSoundPool.getInstance(this).addMusic(GameSoundPool.GAMECLICK, R.raw.click,0);
 	}
+
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		if(!mPlayerBullet){
+			//获取在屏幕的绝对坐标，最左上角开始计算
 			int[] local = new int[2];
-			mPlayer2.getLocationOnScreen(local);
+			mPlayer1Bullet.getLocationOnScreen(local);
 			mTranslateAnimation = new TranslateAnimation(0, 0,local[1],0);
 			mTranslateAnimation.setDuration(100);
 			mTranslateAnimation.setAnimationListener(this);
-			mPlayer2.startAnimation(mTranslateAnimation);
+			mPlayer1Bullet.startAnimation(mTranslateAnimation);
 			mPlayer2Bullet.setVisibility(View.GONE);
 		}
 	}
@@ -84,7 +86,7 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 			selectPlayer(mPlayer1);
 			break;
 		case R.id.playt:
-			selectPlayer(mPlayer1Bullet);
+			selectPlayer(mPlayer2);
 			break;
 		}
 	}
@@ -146,7 +148,7 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		playerAnimation(mPlayer2);
+		playerAnimation(mPlayer1Bullet);
 		mType = R.id.playo;
 	}
 	/**
@@ -155,24 +157,24 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 		mType = play.getId();
 		if(play.hashCode()== mPlayer1.hashCode()){
 			mPlayerBullet =false;
-			playerAnimation(mPlayer2);
+			playerAnimation(mPlayer1Bullet);
 		}else{
 			playerAnimation(mPlayer2Bullet);
 		}
 	}
 	private void playerAnimation(ImageView pb){
-		if(pb.hashCode() == mPlayer2.hashCode()){
+		if(pb.hashCode() == mPlayer1Bullet.hashCode()){
 			mPlayerBullet =false;
-			mPlayer2.setVisibility(View.VISIBLE);
-			mPlayer2.startAnimation(mTranslateAnimation);
+			mPlayer1Bullet.setVisibility(View.VISIBLE);
+			mPlayer1Bullet.startAnimation(mTranslateAnimation);
 			mPlayer2Bullet.setVisibility(View.GONE);
 			mPlayer2Bullet.clearAnimation();
 		}else{
 			mPlayerBullet = true;
 			mPlayer2Bullet.setVisibility(View.VISIBLE);
 			mPlayer2Bullet.startAnimation(mTranslateAnimation);
-			mPlayer2.setVisibility(View.GONE);
-			mPlayer2.clearAnimation();
+			mPlayer1Bullet.setVisibility(View.GONE);
+			mPlayer1Bullet.clearAnimation();
 		}
 	}
 
@@ -198,7 +200,7 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 		if(mPlayerBullet){
 			mPlayer2Bullet.startAnimation(mTranslateAnimation);
 		}else{
-			mPlayer2.startAnimation(mTranslateAnimation);
+			mPlayer1Bullet.startAnimation(mTranslateAnimation);
 		}
 	}
 	@Override

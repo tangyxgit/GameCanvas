@@ -15,8 +15,9 @@ import android.widget.TextView;
 
 public class BaseHomeActivity extends AppCompatActivity {
     /**
+     *
      */
-    public void FontManager(ViewGroup root, Activity act){
+    public void FontManager(ViewGroup root){
         Typeface tf = getFontFace(R.string.interstellar);
         if(root!= null){
             for (int i = 0; i < root.getChildCount(); i++) {
@@ -26,7 +27,7 @@ public class BaseHomeActivity extends AppCompatActivity {
                 }else if(v instanceof Button){
                     ((Button) v).setTypeface(tf);
                 }else if(v instanceof ViewGroup){
-                    FontManager(((ViewGroup)v),this);
+                    FontManager(((ViewGroup)v));
                 }
             }
         }

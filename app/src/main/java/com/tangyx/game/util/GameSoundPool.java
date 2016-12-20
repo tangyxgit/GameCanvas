@@ -44,9 +44,6 @@ public class GameSoundPool {
 	public void play(int soundId,int priority){
 		mSoundPool.play(mSoundMap.get(soundId), mVolume, mVolume, priority, 0, 1f);
 	}
-	public void unLoad(int soundId){
-		mSoundPool.unload(soundId);
-	}
 	public void clear(){
 		if(mSoundMap.size()>0){
 			while(dex< mSoundMap.size()){

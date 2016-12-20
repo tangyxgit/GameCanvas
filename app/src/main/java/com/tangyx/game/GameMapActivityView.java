@@ -41,7 +41,7 @@ public class GameMapActivityView extends BaseHomeActivity implements OnGestureLi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_map);
 		ViewGroup root = getAllView(this);
-		FontManager(root, this);
+		FontManager(root);
 		mViewFlipper = (ViewFlipper) findViewById(R.id.cosview);
 		detector = new GestureDetector(this);
 		mStart = (TextView) findViewById(R.id.lets);
