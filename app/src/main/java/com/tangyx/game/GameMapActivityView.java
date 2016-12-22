@@ -163,8 +163,6 @@ public class GameMapActivityView extends BaseHomeActivity implements OnGestureLi
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		mViewFlipper.removeAllViews();
-		handler.sendEmptyMessage(0);
 	}
     @Override
 	public void onClick(View v) {
