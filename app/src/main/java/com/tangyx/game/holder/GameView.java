@@ -22,10 +22,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
      */
     private Canvas mCanvas;
     /**
-     * 画笔
-     */
-    private Paint mPaint;
-    /**
      * 游戏背景
      */
     private String mBackGround;
@@ -48,9 +44,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
      * 初始化资源
      */
     private void initGame(){
-        //初始化画笔
-        mPaint = new Paint();
-        mPaint.setColor(Color.WHITE);
         //加载背景图片资源
         mDrawBackground = new DrawBackground(getContext(),this.mBackGround);
     }
