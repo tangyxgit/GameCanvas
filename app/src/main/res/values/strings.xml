@@ -18,8 +18,8 @@
  	<string name="menumusic">gamemusic.mp3</string>
  	<string name="enemymusic">enemy.mp3"</string>
  	<string name="shockmusic">shock.mp3</string>
- 	<string name="reading">准备就绪,点击FIRE!</string>
- 	<string name="conution">点击FIRE,继续游戏!</string>
+ 	<string name="reading">准备就绪,点击白色圆圈FIRE!</string>
+ 	<string name="conution">点击白色圆圈FIRE,继续游戏!</string>
  	<string name="coswarn">战斗经验不足,未能解锁~</string>
  	<string name="gamenumber">总计游戏次数:</string>
  	<string name="score">score</string>

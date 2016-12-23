@@ -23,6 +23,18 @@ public class BitmapUtils {
 		return tempBmp;
 	}
 	/**
+	 * 按照大小处理图片
+	 */
+	public static Bitmap getBitmap(Bitmap bitmap,int w,int h){
+		Matrix matrix = new Matrix();
+		float bw = bitmap.getWidth();
+		float bh = bitmap.getHeight();
+		float sw = w / bw;
+		float sh = h / bh;
+		matrix.postScale(sw,sh);
+		return getBitmap(bitmap,sw,sh);
+	}
+	/**
 	 * 镜像垂直翻转图片
 	 */
 	public static Bitmap getScaleMap(Bitmap bitmap){
@@ -69,7 +81,7 @@ public class BitmapUtils {
 	 * @return
 	 */
 	public static Bitmap getBitmap(Context context,Bitmap bitmap,int type){
-		Bitmap tempBmp =null;
+		Bitmap tempBmp ;
 		try {
 			Matrix matrix = new Matrix();
 			float scaleW = (float) ScreenUtils.getScreenWidth(context)/bitmap.getWidth();

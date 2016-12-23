@@ -55,7 +55,7 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 		mGameAnimation = new GameScaleAnimation(1000);
 		GameMusic.getInstance(this).prepareMediaPlayer(getString(R.string.menumusic));
 		GameMusic.getInstance(this).play(true);
-		mType = R.id.playo;
+		mType = R.drawable.player0;
 		GameSoundPool.getInstance(this).addMusic(GameSoundPool.GAMECLICK, R.raw.click,0);
 	}
 
@@ -147,20 +147,15 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 		super.onDestroy();
 		GameMusic.getInstance(this).stop();
 	}
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-		playerAnimation(mPlayer1Bullet);
-		mType = R.id.playo;
-	}
 	/**
 	 */
 	private void selectPlayer(ImageView play){
-		mType = play.getId();
 		if(play.hashCode()== mPlayer1.hashCode()){
 			mPlayerBullet =false;
+			mType = R.drawable.player0;
 			playerAnimation(mPlayer1Bullet);
 		}else{
+			mType = R.drawable.player1;
 			playerAnimation(mPlayer2Bullet);
 		}
 	}
@@ -187,7 +182,6 @@ public class MainActivity extends BaseHomeActivity  implements OnClickListener,O
 	}
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		System.out.println(event.getAction());
 		if(event.getAction() == MotionEvent.ACTION_DOWN){
 			((TextView) v).setTextColor(Color.RED);
 		}else if(event.getAction() == MotionEvent.ACTION_UP){

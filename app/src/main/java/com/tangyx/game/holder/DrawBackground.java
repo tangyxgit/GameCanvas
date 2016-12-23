@@ -27,17 +27,17 @@ public class DrawBackground extends DrawGame {
     private float mSpeedBY=4;
 
     public DrawBackground(Context context,String background){
-        super(context);
+        super(context,background);
+    }
+
+    @Override
+    void initialize(Object... objects) {
         //加载背景图片
-        mBackgroundBottom = BitmapUtils.ReadBitMap(context,background);
+        mBackgroundBottom = BitmapUtils.ReadBitMap(getContext(), (String) objects[0]);
         //把背景图大小设置为手机屏幕大小
         mBackgroundBottom = BitmapUtils.getBitmap(getContext(), mBackgroundBottom,0);
         //把背景图在垂直翻转生成一张新的图片
         mBackgroundTop = BitmapUtils.getScaleMap(mBackgroundBottom);
-    }
-
-    @Override
-    void initialize() {
         mBottomY = 0;
         /**
          * 第一张背景放在屏幕的顶部外面
