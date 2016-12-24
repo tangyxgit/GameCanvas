@@ -39,9 +39,15 @@ public class DrawPlayer extends DrawGame {
     private float mSpeedAngle=0.05f;
     private float mBlowAngle = 1;
     private Matrix mBlowMatrix;
+    /**
+     * 当前武器类型
+     */
+    private int mBulletType=DrawPlayerBullet.PLAYER_BULLET_A;
+
 
     public DrawPlayer(Context context,int player) {
-        super(context,player);
+        super(context);
+        initialize(player);
     }
 
     @Override
@@ -128,8 +134,16 @@ public class DrawPlayer extends DrawGame {
         this.mPlayerX = mPlayerX-mPlayer.getWidth()/1.5f;
     }
 
+    public float getPlayerX() {
+        return mPlayerX;
+    }
+
     public void setPlayerY(float mPlayerY) {
         this.mPlayerY = mPlayerY-mPlayer.getHeight() * 2.5f;
+    }
+
+    public float getPlayerY() {
+        return mPlayerY;
     }
 
     public float getCollectX() {
@@ -143,5 +157,17 @@ public class DrawPlayer extends DrawGame {
 
     public Bitmap getCollect() {
         return mCollect;
+    }
+
+    public int getWidth(){
+        return mPlayer.getWidth();
+    }
+
+    public int getBulletType() {
+        return mBulletType;
+    }
+
+    public void setBulletType(int mBulletType) {
+        this.mBulletType = mBulletType;
     }
 }

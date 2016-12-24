@@ -1,6 +1,7 @@
 package com.tangyx.game.holder;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,6 +10,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.tangyx.game.R;
+import com.tangyx.game.util.BitmapUtils;
+import com.tangyx.game.util.SizeUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -42,6 +48,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     private String mBackGround;
     private DrawBackground mDrawBackground;
     /**
+     * 主角子弹
+     */
+    private Bitmap mPlayerBulletA;//黄色子弹
+    private Bitmap mPlayerBulletB;//红色子弹
+    private Bitmap mPlayerBulletC;//月牙形子弹
+    private List<DrawPlayerBullet> mPlayerBullets;//主角子弹的集合，可以理解为弹夹
+    private int mCountPlayerBullet;//子弹发出的速度，间隔多久加入一颗子弹。
+    private int mTempBulletType=0;//模拟子弹类型的变化
+    /**
      * 游戏主角
      */
     private DrawPlayer mPlayer;
@@ -70,6 +85,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         //加载背景图片资源
         mDrawBackground = new DrawBackground(getContext(),this.mBackGround);
         mPlayer = new DrawPlayer(getContext(),this.mSelectPlayer);
+        mPlayerBulletA = BitmapUtils.ReadBitMap(getContext(),R.drawable.pl_bullet0);
+        int wh = SizeUtils.dp2px(getContext(),10);
+        mPlayerBulletA = BitmapUtils.getBitmap(mPlayerBulletA,wh,wh);
+        mPlayerBulletB = BitmapUtils.ReadBitMap(getContext(),R.drawable.pl_bullet2);
+        mPlayerBulletB = BitmapUtils.getBitmap(mPlayerBulletB,wh,wh);
+        mPlayerBulletC = BitmapUtils.ReadBitMap(getContext(),R.drawable.pl_bullet4);
+        mPlayerBulletC = BitmapUtils.getBitmap(mPlayerBulletC,wh,wh);
+        mPlayerBullets = new ArrayList<>();
     }
 
     /**
@@ -87,6 +110,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         //判断当前游戏状态
         switch (GAME_STATE){
             case ING:
+                addPlayerBullet();
                 break;
             case READY:
                 mPlayer.onDrawCollect(mCanvas,getContext().getString(R.string.reading));
@@ -94,6 +118,62 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             case PAUSE:
                 mPlayer.onDrawCollect(mCanvas,getContext().getString(R.string.conution));
                 break;
+        }
+    }
+
+    /**
+     * 添加主角子弹
+     */
+    private void addPlayerBullet(){
+        mCountPlayerBullet++;
+        int mCreatePlayerBullet = 7;//间接性循环加入子弹
+        if(mCountPlayerBullet % mCreatePlayerBullet ==0){
+            int bullet = mPlayer.getBulletType();
+            float playerX = mPlayer.getPlayerX();
+            float playerY = mPlayer.getPlayerY();
+            float bulletX;
+            switch (bullet){
+                case DrawPlayerBullet.PLAYER_BULLET_A:
+                    bulletX = playerX+(mPlayer.getWidth()-mPlayerBulletA.getWidth())/2;
+                    mPlayerBullets.add(new DrawPlayerBullet(getContext(),bulletX, playerY,mPlayerBulletA,bullet));
+                    break;
+                case DrawPlayerBullet.PLAYER_BULLET_B:
+                case DrawPlayerBullet.PLAYER_BULLET_C:
+                    //中间
+                    bulletX = playerX+(mPlayer.getWidth()-mPlayerBulletC.getWidth())/2;
+                    mPlayerBullets.add(new DrawPlayerBullet(getContext(),bulletX, playerY,mPlayerBulletC,DrawPlayerBullet.PLAYER_BULLET_A));
+                    //左边
+                    bulletX = playerX - mPlayerBulletC.getWidth();
+                    mPlayerBullets.add(new DrawPlayerBullet(getContext(),bulletX, playerY,mPlayerBulletC,DrawPlayerBullet.PLAYER_BULLET_B));
+                    //右边
+                    bulletX = playerX + mPlayer.getWidth();
+                    mPlayerBullets.add(new DrawPlayerBullet(getContext(),bulletX, playerY,mPlayerBulletC,DrawPlayerBullet.PLAYER_BULLET_C));
+                    break;
+                case DrawPlayerBullet.PLAYER_BULLET_D:
+                    //左边
+                    bulletX = playerX;
+                    mPlayerBullets.add(new DrawPlayerBullet(getContext(),bulletX,playerY,mPlayerBulletB,bullet));
+                    //右边
+                    bulletX = playerX+mPlayer.getWidth()-mPlayerBulletB.getWidth();
+                    mPlayerBullets.add(new DrawPlayerBullet(getContext(),bulletX, playerY,mPlayerBulletB,bullet));
+                    break;
+            }
+        }
+        for (int i=0;i<mPlayerBullets.size();i++) {
+            DrawPlayerBullet bullet = mPlayerBullets.get(i);
+            if(bullet.isDead()){//如果有子弹已经飞出屏幕直接移除。
+                mPlayerBullets.remove(bullet);
+            }else{
+                bullet.updateGame();
+                bullet.onDraw(mCanvas);
+            }
+        }
+        //模拟子弹类型变化
+        mTempBulletType++;
+        if(mTempBulletType == 50){
+            mPlayer.setBulletType(DrawPlayerBullet.PLAYER_BULLET_D);
+        }else if(mTempBulletType == 100){
+            mPlayer.setBulletType(DrawPlayerBullet.PLAYER_BULLET_C);
         }
     }
 

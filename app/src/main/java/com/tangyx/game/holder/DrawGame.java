@@ -16,18 +16,19 @@ public abstract class DrawGame {
     private Context mContext;
     protected Paint mPaint;
 
-    public DrawGame(Context context,Object... objects) {
+    public DrawGame(Context context) {
         this.mContext = context;
         mPaint = new Paint();
         mPaint.setColor(Color.WHITE);
         mPaint.setAntiAlias(true);
-        initialize(objects);
     }
 
     /**
      * 初始化内容
      */
-    abstract void initialize(Object... objects);
+     void initialize(Object... objects){
+
+     };
 
     /**
      * 绘制内容

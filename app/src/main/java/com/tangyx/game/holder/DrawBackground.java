@@ -27,7 +27,8 @@ public class DrawBackground extends DrawGame {
     private float mSpeedBY=4;
 
     public DrawBackground(Context context,String background){
-        super(context,background);
+        super(context);
+        initialize(background);
     }
 
     @Override
