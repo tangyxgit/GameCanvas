@@ -27,12 +27,12 @@ public class DrawBackground extends DrawGame {
     private float mSpeedBY=4;
 
     public DrawBackground(Context context,String background){
-        super(context);
-        initialize(background);
+        super(context,background);
     }
 
     @Override
     void initialize(Object... objects) {
+        super.initialize(objects);
         //加载背景图片
         mBackgroundBottom = BitmapUtils.ReadBitMap(getContext(), (String) objects[0]);
         //把背景图大小设置为手机屏幕大小

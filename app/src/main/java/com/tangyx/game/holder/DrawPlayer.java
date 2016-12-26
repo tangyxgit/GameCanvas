@@ -46,12 +46,12 @@ public class DrawPlayer extends DrawGame {
 
 
     public DrawPlayer(Context context,int player) {
-        super(context);
-        initialize(player);
+        super(context,player);
     }
 
     @Override
     void initialize(Object... objects) {
+        super.initialize(objects);
         mPlayer = BitmapUtils.ReadBitMap(getContext(), (Integer) objects[0]);
         int wh = SizeUtils.dp2px(getContext(),20);
         mPlayer = BitmapUtils.getBitmap(mPlayer,wh,wh);
