@@ -62,6 +62,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     private DrawPlayer mPlayer;
     private int mSelectPlayer;
     /**
+     * 敌方战机
+     */
+    private static Bitmap mEnemyA;
+    private static Bitmap mEnemyB;
+    private static Bitmap mEnemyC;
+    private static Bitmap mEnemyD;
+    private static Bitmap mEnemyE;
+    private static Bitmap mEnemyF;
+    private static Bitmap mEnemyG;
+    private static Bitmap mEnemyH;
+    private static Bitmap mEnemyI;
+    private static Bitmap mEnemyJ;
+    private static Bitmap mEnemyK;
+    private static Bitmap mEnemyY;
+    private static Bitmap mEnemyZ;
+    /**
+     * 敌机子弹
+     */
+    private static Bitmap mEnemyBullet;
+    /**
      * 是否暂停，或者退出了
      */
     private boolean isRun=true;
@@ -93,6 +113,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         mPlayerBulletC = BitmapUtils.ReadBitMap(getContext(),R.drawable.pl_bullet4);
         mPlayerBulletC = BitmapUtils.getBitmap(mPlayerBulletC,wh,wh);
         mPlayerBullets = new ArrayList<>();
+        //敌机资源
+        mEnemyA = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy01);
+        mEnemyB = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy02);
+        mEnemyC = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy03);
+        mEnemyD = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy04);
+        mEnemyE = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy05);
+        mEnemyF = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy06);
+        mEnemyG = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy07);
+        mEnemyH = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy08);
+        mEnemyI = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy09);
+        mEnemyJ = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy10);
+        mEnemyK = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy12);
+        mEnemyY = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemytop06);
+        mEnemyZ = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemytop02);
+        mEnemyBullet = BitmapUtils.ReadBitMap(getContext(),R.drawable.enemybullet1);
     }
 
     /**

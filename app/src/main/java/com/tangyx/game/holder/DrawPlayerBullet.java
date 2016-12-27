@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import com.tangyx.game.util.SLog;
 import com.tangyx.game.util.ScreenUtils;
 
 /**
