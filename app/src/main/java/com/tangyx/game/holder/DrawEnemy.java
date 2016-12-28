@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 
+import com.tangyx.game.util.SLog;
 import com.tangyx.game.util.ScreenUtils;
 
 import java.util.Random;
@@ -123,8 +124,10 @@ public class DrawEnemy extends DrawGame {
 
     @Override
     void onDraw(Canvas canvas) {
+        canvas.save();
         Bitmap bm = getMatrixBitmap();
         canvas.drawBitmap(bm,mEnemyX,mEnemyY,mPaint);
+        canvas.restore();
     }
 
     /**
@@ -189,12 +192,18 @@ public class DrawEnemy extends DrawGame {
                 if(!isDead){//向右倾斜下降
                     mEnemyX+=mEnemySpeed/2;
                     mEnemyY+=mEnemySpeed;
+                    if(mEnemyX>screenW||mEnemyY>screenH){
+                        isDead=true;
+                    }
                 }
                 break;
             case TYPE_C:
                 if(!isDead){//向左倾斜下降
                     mEnemyX-=mEnemySpeed/2;
                     mEnemyY+=mEnemySpeed;
+                    if(mEnemyX<-1||mEnemyY>screenH){
+                        isDead = true;
+                    }
                 }
                 break;
             case TYPE_D:
@@ -203,6 +212,9 @@ public class DrawEnemy extends DrawGame {
                         mEnemySpeed+=1;
                     }
                     mEnemyY+=mEnemySpeed;
+                    if(mEnemyY>screenH){
+                        isDead=true;
+                    }
                 }
                 break;
             case TYPE_E:
@@ -231,6 +243,9 @@ public class DrawEnemy extends DrawGame {
                         mEnemyX+=mEnemySpeed;
                     }
                     mEnemyY+=mEnemySpeed/2;
+                    if(mEnemyY>screenH){
+                        isDead = true;
+                    }
                 }
                 break;
             case TYPE_G:
@@ -250,6 +265,9 @@ public class DrawEnemy extends DrawGame {
                         mEnemyX-=mEnemySpeed;
                     }
                     mEnemyY+=mEnemySpeed/2;
+                    if(mEnemyY>screenH){
+                        isDead = true;
+                    }
                 }
                 break;
             case TYPE_H:
@@ -261,6 +279,9 @@ public class DrawEnemy extends DrawGame {
                         if(mEnemyStopTop){
                             mEnemyX +=0;
                             mEnemyY +=mEnemySpeed;
+                            if(mEnemyY>screenH){
+                                isDead = true;
+                            }
                         }else{
                             mEnemyX-=mEnemySpeed/2;
                             mEnemyY-=mEnemySpeed/2;
@@ -283,6 +304,9 @@ public class DrawEnemy extends DrawGame {
                         if(mEnemyStopTop){
                             mEnemyX+=0;
                             mEnemyY+=mEnemySpeed;
+                            if(mEnemyY>screenH){
+                                isDead = true;
+                            }
                         }else{
                             mEnemyX+=mEnemySpeed/2;
                             mEnemyY-=mEnemySpeed/2;
@@ -304,6 +328,9 @@ public class DrawEnemy extends DrawGame {
                     if(mEnemyStopLeft){
                         mEnemyX+=mEnemySpeedX;
                         mEnemyY+=mEnemySpeedY;
+                        if(mEnemyY>screenH){
+                            isDead= true;
+                        }
                     }else{
                         mAngle=0;
                         mEnemyY+=mEnemySpeed;
@@ -319,6 +346,9 @@ public class DrawEnemy extends DrawGame {
                     if(mEnemyStopLeft){
                         mEnemyX+=mEnemySpeedX;
                         mEnemyY+=mEnemySpeedY;
+                        if(mEnemyY>screenH){
+                            isDead= true;
+                        }
                     }else{
                         mAngle=0;
                         mEnemyY+=mEnemySpeed;
@@ -420,6 +450,10 @@ public class DrawEnemy extends DrawGame {
                 }else{
                     if(mEnemyStopTop){
                         mEnemyY+=mEnemySpeed;
+                        if(mEnemyY>screenH){
+                            isDead = true;
+                            break;
+                        }
                     }else{
                         mEnemyY+=mEnemySpeed*3;
                         if(mEnemyY>=screenH/2){
@@ -444,6 +478,10 @@ public class DrawEnemy extends DrawGame {
                     mEnemyY-= mTempEnemyY *2;
                     mEnemyX+=mEnemySpeed;
                 }
+                if(mEnemyY>screenH){
+                    isDead = true;
+                    break;
+                }
                 break;
             case TYPE_Q://右侧z字形运动
                 if(mEnemyX<=0){
@@ -460,6 +498,10 @@ public class DrawEnemy extends DrawGame {
                 }else{
                     mEnemyY-= mTempEnemyY *2;
                     mEnemyX-=mEnemySpeed;
+                }
+                if(mEnemyY>screenH){
+                    isDead = true;
+                    break;
                 }
                 break;
             case TYPE_R://左边中间螺旋出场
@@ -600,11 +642,10 @@ public class DrawEnemy extends DrawGame {
                 break;
             case TYPE_Z:
                 mEnemyY+=mEnemySpeed;
+                if(mEnemyY>screenH){
+                    isDead=true;
+                }
                 break;
-        }
-        //消失在屏幕以后敌机失效死亡
-        if(mEnemyX>screenW||mEnemyY>screenH||mEnemyX<-1){
-            isDead=true;
         }
     }
 
@@ -661,5 +702,21 @@ public class DrawEnemy extends DrawGame {
                 mEnemySpeed = screenH/160f;
                 break;
         }
+    }
+
+    public int getEnemyType() {
+        return mEnemyType;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public boolean isEnemyStopTop() {
+        return mEnemyStopTop;
+    }
+
+    public boolean isEnemyStopLeft() {
+        return mEnemyStopLeft;
     }
 }

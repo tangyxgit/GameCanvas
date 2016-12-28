@@ -10,11 +10,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.tangyx.game.R;
+import com.tangyx.game.factory.Level1;
 import com.tangyx.game.util.BitmapUtils;
 import com.tangyx.game.util.SizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -62,25 +64,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     private DrawPlayer mPlayer;
     private int mSelectPlayer;
     /**
-     * 敌方战机
+     * 模拟关卡
+     * 当前出现的敌机类型集合
      */
-    private static Bitmap mEnemyA;
-    private static Bitmap mEnemyB;
-    private static Bitmap mEnemyC;
-    private static Bitmap mEnemyD;
-    private static Bitmap mEnemyE;
-    private static Bitmap mEnemyF;
-    private static Bitmap mEnemyG;
-    private static Bitmap mEnemyH;
-    private static Bitmap mEnemyI;
-    private static Bitmap mEnemyJ;
-    private static Bitmap mEnemyK;
-    private static Bitmap mEnemyY;
-    private static Bitmap mEnemyZ;
-    /**
-     * 敌机子弹
-     */
-    private static Bitmap mEnemyBullet;
+    private Level1 mLevel;
+    private Map<Integer,Integer> mLevelArray;
     /**
      * 是否暂停，或者退出了
      */
@@ -113,21 +101,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         mPlayerBulletC = BitmapUtils.ReadBitMap(getContext(),R.drawable.pl_bullet4);
         mPlayerBulletC = BitmapUtils.getBitmap(mPlayerBulletC,wh,wh);
         mPlayerBullets = new ArrayList<>();
-        //敌机资源
-        mEnemyA = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy01);
-        mEnemyB = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy02);
-        mEnemyC = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy03);
-        mEnemyD = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy04);
-        mEnemyE = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy05);
-        mEnemyF = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy06);
-        mEnemyG = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy07);
-        mEnemyH = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy08);
-        mEnemyI = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy09);
-        mEnemyJ = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy10);
-        mEnemyK = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemy12);
-        mEnemyY = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemytop06);
-        mEnemyZ = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemytop02);
-        mEnemyBullet = BitmapUtils.ReadBitMap(getContext(),R.drawable.enemybullet1);
+        //初始化关卡
+        mLevel = new Level1(getContext(),mPlayer);
     }
 
     /**
@@ -145,6 +120,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         //判断当前游戏状态
         switch (GAME_STATE){
             case ING:
+                onDrawEnemy();
                 addPlayerBullet();
                 break;
             case READY:
@@ -155,7 +131,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                 break;
         }
     }
-
     /**
      * 添加主角子弹
      */
@@ -210,6 +185,57 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         }else if(mTempBulletType == 100){
             mPlayer.setBulletType(DrawPlayerBullet.PLAYER_BULLET_C);
         }
+    }
+    /**
+     * 绘制敌机
+     * 判断敌机是否失效
+     */
+    private void onDrawEnemy(){
+        mLevel.addEnemy(mLevelArray);//添加敌机
+        List<DrawEnemy> drawEnemies = mLevel.getEnemyList();
+        for (int i=0;i<drawEnemies.size();i++) {
+            DrawEnemy en = drawEnemies.get(i);
+            if(en.isDead()){
+                drawEnemies.remove(en);
+            }else{
+                en.updateGame();
+                en.onDraw(mCanvas);
+                if((en.getEnemyType()==DrawEnemy.TYPE_V ||en.getEnemyType()==DrawEnemy.TYPE_W)&&en.isEnemyStopTop() ||en.getEnemyType()==DrawEnemy.TYPE_J ||en.getEnemyType()==DrawEnemy.TYPE_K){//追踪主角的战机
+                    en.getAngleRotate(mPlayer.getPlayerX(), mPlayer.getPlayerY(),true);
+                }else if(en.getEnemyType()==DrawEnemy.TYPE_A||en.getEnemyType()==DrawEnemy.TYPE_D||en.getEnemyType()==DrawEnemy.TYPE_E||en.getEnemyType()==DrawEnemy.TYPE_P||en.getEnemyType()==DrawEnemy.TYPE_Q||en.getEnemyType()==DrawEnemy.TYPE_T||en.getEnemyType()==DrawEnemy.TYPE_U){
+                    en.getAngleRotate(mPlayer.getPlayerX(), mPlayer.getPlayerY(),false);
+                }
+            }
+        }
+    }
+    /**
+     * 分配敌机资源
+     */
+    public void distribution(){
+        if(mLevelArray!=null){
+            mLevelArray.clear();
+        }
+        boolean senior = seniorEnemy();
+        if(senior) return;
+        //不是高级敌机出场就去获取普通敌机
+        mLevelArray = mLevel.enemyLevelArray(mLevel.getEnemyArrayIndex());
+    }
+    /**
+     * 高级将领出场
+     */
+    private boolean seniorEnemy(){
+        for (DrawEnemy en:mLevel.getEnemyList()) {
+            //当高级将领出现 其余战机 处于待命状态,并且降低背景循环运行的速度，一个视觉差的感觉
+            if(en.getEnemyType()==DrawEnemy.TYPE_T||en.getEnemyType()==DrawEnemy.TYPE_U){
+                mDrawBackground.setSpeedBY(4);
+                return true;
+            }else if(en.getEnemyType()==DrawEnemy.TYPE_Y){
+                mDrawBackground.setSpeedBY(4);
+                return true;
+            }
+        }
+        mDrawBackground.setSpeedBY(10);
+        return false;
     }
 
     @Override
@@ -267,6 +293,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     @Override
     public void run() {
         while (isRun){
+            //分配敌机数量
+            distribution();
             //锁定画布
             synchronized (mHolder){
                 mCanvas = mHolder.lockCanvas();

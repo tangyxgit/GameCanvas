@@ -1,6 +1,7 @@
 package com.tangyx.game;
 
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Window;
@@ -11,6 +12,7 @@ import com.tangyx.game.holder.GameView;
 public class GameActivity extends BaseHomeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         // 隐藏标题栏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         // 隐藏状态栏

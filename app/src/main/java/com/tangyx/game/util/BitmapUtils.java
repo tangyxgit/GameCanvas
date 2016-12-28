@@ -81,7 +81,7 @@ public class BitmapUtils {
 	 * @return
 	 */
 	public static Bitmap getBitmap(Context context,Bitmap bitmap,int type){
-		Bitmap tempBmp ;
+		Bitmap tempBmp = null;
 		try {
 			Matrix matrix = new Matrix();
 			float scaleW = (float) ScreenUtils.getScreenWidth(context)/bitmap.getWidth();
@@ -100,11 +100,10 @@ public class BitmapUtils {
 				matrix.postScale(scaleW, scaleH);
 			}
 			tempBmp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
-			return tempBmp;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return tempBmp;
 	}
 	/**
 	 * 图片切割器 按照宽度切割

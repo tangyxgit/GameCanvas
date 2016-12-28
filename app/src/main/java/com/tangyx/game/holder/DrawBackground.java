@@ -24,7 +24,7 @@ public class DrawBackground extends DrawGame {
     /**
      * 背景移动速度
      */
-    private float mSpeedBY=4;
+    private float mSpeedBY;
 
     public DrawBackground(Context context,String background){
         super(context,background);
@@ -44,7 +44,7 @@ public class DrawBackground extends DrawGame {
          * 第一张背景放在屏幕的顶部外面
          */
         mTopY = -ScreenUtils.getScreenHeight(getContext());
-        mSpeedBY=4;
+        mSpeedBY=10;
     }
 
     @Override
@@ -67,5 +67,9 @@ public class DrawBackground extends DrawGame {
         if(mTopY >= ScreenUtils.getScreenHeight(getContext())){
             mTopY = -ScreenUtils.getScreenHeight(getContext());
         }
+    }
+
+    public void setSpeedBY(float mSpeedBY) {
+        this.mSpeedBY = mSpeedBY;
     }
 }
