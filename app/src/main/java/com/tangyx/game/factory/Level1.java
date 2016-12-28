@@ -223,11 +223,11 @@ public class Level1 extends BaseLevel {
                 break;
             case 22:
                 tempMap.put(DrawEnemy.TYPE_A,4);
-                tempMap.put(DrawEnemy.TYPE_V,4);
+//                tempMap.put(DrawEnemy.TYPE_V,4);
                 break;
             case 23:
                 tempMap.put(DrawEnemy.TYPE_D,4);
-                tempMap.put(DrawEnemy.TYPE_W,4);
+//                tempMap.put(DrawEnemy.TYPE_W,4);
                 break;
             case 24:
                 tempMap.put(DrawEnemy.TYPE_X,4);
