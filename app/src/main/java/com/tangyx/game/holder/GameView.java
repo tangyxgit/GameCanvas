@@ -69,6 +69,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
      */
     private Level1 mLevel;
     private Map<Integer,Integer> mLevelArray;
+    private int countEnemyBullet;
     /**
      * 是否暂停，或者退出了
      */
@@ -122,6 +123,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             case ING:
                 onDrawEnemy();
                 addPlayerBullet();
+                dieEnemyBullet();
                 break;
             case READY:
                 mPlayer.onDrawCollect(mCanvas,getContext().getString(R.string.reading));
@@ -191,6 +193,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
      * 判断敌机是否失效
      */
     private void onDrawEnemy(){
+        countEnemyBullet++;
         mLevel.addEnemy(mLevelArray);//添加敌机
         List<DrawEnemy> drawEnemies = mLevel.getEnemyList();
         for (int i=0;i<drawEnemies.size();i++) {
@@ -205,6 +208,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                 }else if(en.getEnemyType()==DrawEnemy.TYPE_A||en.getEnemyType()==DrawEnemy.TYPE_D||en.getEnemyType()==DrawEnemy.TYPE_E||en.getEnemyType()==DrawEnemy.TYPE_P||en.getEnemyType()==DrawEnemy.TYPE_Q||en.getEnemyType()==DrawEnemy.TYPE_T||en.getEnemyType()==DrawEnemy.TYPE_U){
                     en.getAngleRotate(mPlayer.getPlayerX(), mPlayer.getPlayerY(),false);
                 }
+                //添加敌机子弹
+                if(countEnemyBullet%50==0){//添加一次敌机子弹
+                    mLevel.addEnemyBullet(en);
+                    countEnemyBullet=0;
+                }
+            }
+        }
+    }
+    /**
+     * 判断敌机子弹是否失效
+     */
+    private void dieEnemyBullet(){
+        List<DrawEnemyBullet> list = mLevel.getEnemyBullets();
+        for (int i = 0; i < list.size(); i++) {//判断敌机子弹是否是失效
+            DrawEnemyBullet bullet = list.get(i);
+            if(bullet.isDead()){
+                list.remove(bullet);//清除
+            }else{
+                bullet.updateGame();
+                bullet.onDraw(mCanvas);
             }
         }
     }

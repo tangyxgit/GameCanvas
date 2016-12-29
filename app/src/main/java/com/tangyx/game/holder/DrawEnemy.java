@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 
-import com.tangyx.game.util.SLog;
 import com.tangyx.game.util.ScreenUtils;
 
 import java.util.Random;
@@ -718,5 +717,24 @@ public class DrawEnemy extends DrawGame {
 
     public boolean isEnemyStopLeft() {
         return mEnemyStopLeft;
+    }
+
+    public float getEnemyX() {
+        return mEnemyX;
+    }
+
+    public float getEnemyY() {
+        return mEnemyY;
+    }
+
+    public int getWidth(){
+        return mEnemy.getWidth();
+    }
+    public int getHeight(){
+        return mEnemy.getHeight();
+    }
+
+    public float getEnemySpeed(){
+        return mEnemySpeed;
     }
 }

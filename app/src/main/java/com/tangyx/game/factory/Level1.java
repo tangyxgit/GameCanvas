@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import com.tangyx.game.R;
 import com.tangyx.game.holder.DrawEnemy;
+import com.tangyx.game.holder.DrawEnemyBullet;
 import com.tangyx.game.holder.DrawPlayer;
 import com.tangyx.game.util.BitmapUtils;
 import com.tangyx.game.util.ScreenUtils;
@@ -77,6 +78,10 @@ public class Level1 extends BaseLevel {
      */
     private float tempX;
     private float tempY;
+    /**
+     * 敌机子弹
+     */
+    private List<DrawEnemyBullet> mEnemyBullets;
 
     public Level1(Context context,Object... objects) {
         super(context,objects);
@@ -85,6 +90,7 @@ public class Level1 extends BaseLevel {
     @Override
     public void initialize(Object... objects) {
         mEnemyList = new ArrayList<>();
+        mEnemyBullets = new ArrayList<>();
         int w = SizeUtils.dp2px(getContext(),20);
         int h = SizeUtils.dp2px(getContext(),20);
         //敌机资源
@@ -126,6 +132,10 @@ public class Level1 extends BaseLevel {
         mEnemyZ = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemytop02);
 
         mEnemyBullet = BitmapUtils.ReadBitMap(getContext(),R.drawable.enemybullet1);
+        w = SizeUtils.dp2px(getContext(),5);
+        h = SizeUtils.dp2px(getContext(),5);
+        mEnemyBullet = BitmapUtils.getBitmap(mEnemyBullet,w,h);
+
         mPlayer = (DrawPlayer) objects[0];
     }
 
@@ -521,6 +531,33 @@ public class Level1 extends BaseLevel {
     }
 
     /**
+     * 添加Enemy子弹
+     */
+    public void addEnemyBullet(DrawEnemy en){
+        switch (en.getEnemyType()) {
+            case DrawEnemy.TYPE_A:
+            case DrawEnemy.TYPE_D:
+                mEnemyBullets.add(new DrawEnemyBullet(getContext(),mEnemyBullet,mPlayer,en.getEnemyX()+(en.getWidth()/2),en.getEnemyY()+(en.getHeight()/2), DrawEnemyBullet.BULLET_C));
+                break;
+            case DrawEnemy.TYPE_T:
+            case DrawEnemy.TYPE_U:
+                mEnemyBullets.add(new DrawEnemyBullet(getContext(),mEnemyBullet,mPlayer,en.getEnemyX()+en.getWidth()/2,en.getEnemyY()+en.getHeight(), DrawEnemyBullet.BULLET_C));
+                break;
+            case DrawEnemy.TYPE_Y:
+                mEnemyBullets.add(new DrawEnemyBullet(getContext(),mEnemyBullet,mPlayer,en.getEnemyX()+(en.getWidth()/2),en.getEnemyY()+(en.getHeight()/2), DrawEnemyBullet.BULLET_C));
+                break;
+            case DrawEnemy.TYPE_Z:
+                mEnemyBullets.add(new DrawEnemyBullet(getContext(),mEnemyBullet,mPlayer,en.getEnemyX()+en.getWidth()/2,en.getEnemyY()+en.getHeight(), DrawEnemyBullet.BULLET_C));//中间
+                mEnemyBullets.add(new DrawEnemyBullet(getContext(),mEnemyBullet,mPlayer,en.getEnemyX()+en.getWidth()/2- mEnemyBullet.getWidth()*2,en.getEnemyY()+en.getHeight(),DrawEnemyBullet.BULLET_C));//左边
+                mEnemyBullets.add(new DrawEnemyBullet(getContext(),mEnemyBullet,mPlayer,en.getEnemyX()+en.getWidth()/2+ mEnemyBullet.getWidth()*2,en.getEnemyY()+en.getHeight(),DrawEnemyBullet.BULLET_C));//右边
+                break;
+            default:
+                mEnemyBullets.add(new DrawEnemyBullet(getContext(),mEnemyBullet,en, DrawEnemyBullet.BULLET_A));
+                break;
+        }
+    }
+
+    /**
      * @param num 随机范围
      * @return
      */
@@ -541,4 +578,7 @@ public class Level1 extends BaseLevel {
         return mEnemyList;
     }
 
+    public List<DrawEnemyBullet> getEnemyBullets() {
+        return mEnemyBullets;
+    }
 }
