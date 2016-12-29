@@ -124,6 +124,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                 onDrawEnemy();
                 addPlayerBullet();
                 dieEnemyBullet();
+
                 break;
             case READY:
                 mPlayer.onDrawCollect(mCanvas,getContext().getString(R.string.reading));

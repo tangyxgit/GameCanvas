@@ -74,6 +74,7 @@ public class DrawEnemyBullet extends DrawGame {
         mSpeedX = cx / runtime;
         if(cx>0&& mSpeedX >=5){
             mSpeedX =1;
+
         }else if(cx<0&& mSpeedX <=-5){
             mSpeedX =-1;
         }

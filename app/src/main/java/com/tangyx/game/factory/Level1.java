@@ -472,6 +472,7 @@ public class Level1 extends BaseLevel {
                     mEnY = mEnemy.getHeight()*2;
                     mEnCx = 0;
                     mEnCy = 0;
+
                     life=10;
                     break;
                 case DrawEnemy.TYPE_V:
