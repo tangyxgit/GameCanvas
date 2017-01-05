@@ -33,6 +33,10 @@ public class DrawPlayer extends DrawGame {
     private int mCollectCount;
     private Paint mCollectPaint;
     /**
+     * 是否被击中，被击中后闪烁 并且一定时间内无敌。
+     */
+    public boolean isCollision=true;
+    /**
      * 尾气喷气
      */
     private Bitmap mPlayerBlow;
@@ -130,6 +134,58 @@ public class DrawPlayer extends DrawGame {
 
     }
 
+    /**
+     * 和敌机碰撞
+     * @param en
+     * @return
+     */
+    public boolean isCollisionWith(DrawEnemy en){
+        if(!isCollision){
+            //获取到敌机的xy坐标
+            float ex = en.getEnemyX();
+            float ey = en.getEnemyY();
+            int ew = en.getWidth()/2;
+            int eh = en.getHeight()/2;
+            //得到主角当前位置，主角的高宽和敌机的坐标位置进行对比，如果坐标范围出现重叠 说明敌机和主角碰撞了。
+            if(getPlayerX()+getWidth()/2<=ex||getPlayerX()-getWidth()/2>=ex+ew){
+                return false;
+            }
+            if(getPlayerY()>=ey+eh||getPlayerY()+getHeight()<=ey){
+                return false;
+            }
+            isCollision=true;
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 和敌机子弹碰撞
+     * @param bullet
+     * @return
+     */
+    public boolean isCollisionWith(DrawEnemyBullet bullet){
+        if(!isCollision){
+            //获取敌机子弹的xy坐标
+            float bx = bullet.getBulletX();
+            float by = bullet.getBulletY();
+            float bw = bullet.getWidth();
+            float bh=bullet.getHeight();
+            //计算逻辑和上面主角敌机碰撞一样，每一颗子弹也是一个对象。
+            if(getPlayerX()+getWidth()/2<=bx||getPlayerX()>=bx+bw){
+                return false;
+            }
+            if(getPlayerY()>=by+bh||getPlayerY()+getHeight()/2<=by){
+                return false;
+            }
+            isCollision=true;
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public void setPlayerX(float mPlayerX) {
         this.mPlayerX = mPlayerX-mPlayer.getWidth()/1.5f;
     }
@@ -161,6 +217,10 @@ public class DrawPlayer extends DrawGame {
 
     public int getWidth(){
         return mPlayer.getWidth();
+    }
+
+    public int getHeight(){
+        return mPlayer.getHeight();
     }
 
     public int getBulletType() {

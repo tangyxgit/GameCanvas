@@ -71,6 +71,14 @@ public class DrawEnemy extends DrawGame {
      */
     private int mEnemyType;
     /**
+     * 是否被主角子弹击中
+     */
+    private boolean isCollision;
+    /**
+     * 被击中后闪烁效果时长
+     */
+    private int mCollisionTime;
+    /**
      * 敌机飞行速度
      */
     private float mEnemySpeed;
@@ -125,7 +133,21 @@ public class DrawEnemy extends DrawGame {
     void onDraw(Canvas canvas) {
         canvas.save();
         Bitmap bm = getMatrixBitmap();
-        canvas.drawBitmap(bm,mEnemyX,mEnemyY,mPaint);
+        mPaint.setAlpha(255);
+        if(isCollision){
+            mCollisionTime++;
+            if(mCollisionTime %2==0){
+                mPaint.setAlpha(50);
+                canvas.drawBitmap(bm,mEnemyX,mEnemyY,mPaint);
+            }else{
+                canvas.drawBitmap(bm,mEnemyX,mEnemyY,mPaint);
+            }
+            if(mCollisionTime % 20==0){
+                isCollision =false;
+            }
+        }else{
+            canvas.drawBitmap(bm,mEnemyX,mEnemyY,mPaint);
+        }
         canvas.restore();
     }
 
@@ -701,6 +723,32 @@ public class DrawEnemy extends DrawGame {
                 mEnemySpeed = screenH/160f;
                 break;
         }
+    }
+
+    /**
+     * 判断是否和主角子弹碰撞
+     * @return
+     */
+    public boolean isCollisionWith(DrawPlayerBullet bullet){
+        //获取主角子弹xy的坐标
+        float bx = bullet.getBulletX();
+        float by = bullet.getBulletY();
+        //获取主角子弹的高宽
+        int bw = bullet.getWidth();
+        int bh = bullet.getHeight();
+        //根据子弹的位置和敌机的位置进行范围判断，如果发生重叠，说明进行了碰撞
+        if(getEnemyX()+getWidth()/2<=bx||getEnemyX()>=bx+bw){
+            return false;
+        }
+        if(getEnemyY()+getHeight()/2<=by||getEnemyY()>=by+bh){
+            return false;
+        }
+        isCollision =true;
+        this.mEnemyLife = this.mEnemyLife-1;
+        if(this.mEnemyLife<=0){
+            isDead = true;
+        }
+        return true;
     }
 
     public int getEnemyType() {

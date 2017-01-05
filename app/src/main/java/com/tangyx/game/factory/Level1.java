@@ -130,6 +130,9 @@ public class Level1 extends BaseLevel {
         mEnemyY = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemytop06);
 
         mEnemyZ = BitmapUtils.ReadBitMap(getContext(), R.drawable.enemytop02);
+        w = SizeUtils.dp2px(getContext(),40);
+        h = SizeUtils.dp2px(getContext(),40);
+        mEnemyZ = BitmapUtils.getBitmap(mEnemyZ,w,h);
 
         mEnemyBullet = BitmapUtils.ReadBitMap(getContext(),R.drawable.enemybullet1);
         w = SizeUtils.dp2px(getContext(),5);
@@ -191,9 +194,11 @@ public class Level1 extends BaseLevel {
                 tempMap.put(DrawEnemy.TYPE_K,4);
                 break;
             case 10:
-                tempMap.put(DrawEnemy.TYPE_L,4);
+                tempMap.put(DrawEnemy.TYPE_T,1);
+                tempMap.put(DrawEnemy.TYPE_U,1);
                 break;
             case 11:
+                tempMap.put(DrawEnemy.TYPE_L,4);
                 tempMap.put(DrawEnemy.TYPE_M,4);
                 break;
             case 12:
@@ -233,11 +238,11 @@ public class Level1 extends BaseLevel {
                 break;
             case 22:
                 tempMap.put(DrawEnemy.TYPE_A,4);
-//                tempMap.put(DrawEnemy.TYPE_V,4);
+                tempMap.put(DrawEnemy.TYPE_V,4);
                 break;
             case 23:
                 tempMap.put(DrawEnemy.TYPE_D,4);
-//                tempMap.put(DrawEnemy.TYPE_W,4);
+                tempMap.put(DrawEnemy.TYPE_W,4);
                 break;
             case 24:
                 tempMap.put(DrawEnemy.TYPE_X,4);

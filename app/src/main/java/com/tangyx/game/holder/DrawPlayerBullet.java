@@ -95,4 +95,19 @@ public class DrawPlayerBullet extends DrawGame {
         return isDead;
     }
 
+    public float getBulletY() {
+        return mBulletY;
+    }
+
+    public float getBulletX() {
+        return mBulletX;
+    }
+
+    public int getWidth(){
+        return mBullet.getWidth();
+    }
+
+    public int getHeight(){
+        return mBullet.getHeight();
+    }
 }

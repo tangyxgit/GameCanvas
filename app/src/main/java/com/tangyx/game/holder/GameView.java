@@ -12,6 +12,7 @@ import android.view.SurfaceView;
 import com.tangyx.game.R;
 import com.tangyx.game.factory.Level1;
 import com.tangyx.game.util.BitmapUtils;
+import com.tangyx.game.util.GameSoundPool;
 import com.tangyx.game.util.SizeUtils;
 
 import java.util.ArrayList;
@@ -71,6 +72,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     private Map<Integer,Integer> mLevelArray;
     private int countEnemyBullet;
     /**
+     * 敌机死亡爆炸效果
+     */
+    private static Bitmap mBoom01;
+    private static Bitmap[] mEneyBoom01;
+    private static Bitmap[] mEneyBoom02;
+    private List<DrawBoom> mBooms;
+    /**
      * 是否暂停，或者退出了
      */
     private boolean isRun=true;
@@ -102,8 +110,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         mPlayerBulletC = BitmapUtils.ReadBitMap(getContext(),R.drawable.pl_bullet4);
         mPlayerBulletC = BitmapUtils.getBitmap(mPlayerBulletC,wh,wh);
         mPlayerBullets = new ArrayList<>();
+        //初始化爆炸资源
+        mBoom01 = BitmapUtils.ReadBitMap(getContext(), R.drawable.boom_1);
+        Bitmap temp = BitmapUtils.ReadBitMap(getContext(), R.drawable.boom_0);
+        mEneyBoom01 = BitmapUtils.widthSplit(temp,6);
+        temp = BitmapUtils.ReadBitMap(getContext(), R.drawable.boom_2);
+        mEneyBoom02 = BitmapUtils.widthSplit(temp,6);
+        mBooms = new ArrayList<>();
         //初始化关卡
         mLevel = new Level1(getContext(),mPlayer);
+        //初始化音效
+        GameSoundPool.getInstance(getContext()).addMusic(GameSoundPool.ENEMYCLEARA, R.raw.enemyclear1,1);
+        GameSoundPool.getInstance(getContext()).addMusic(GameSoundPool.ENEMYCLEARB, R.raw.enemyclear2,1);
+        GameSoundPool.getInstance(getContext()).addMusic(GameSoundPool.ENEMYCLEARC, R.raw.enemydie,1);
     }
 
     /**
@@ -124,7 +143,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                 onDrawEnemy();
                 addPlayerBullet();
                 dieEnemyBullet();
-
+                drawBoomDecideOver();
                 break;
             case READY:
                 mPlayer.onDrawCollect(mCanvas,getContext().getString(R.string.reading));
@@ -177,6 +196,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             if(bullet.isDead()){//如果有子弹已经飞出屏幕直接移除。
                 mPlayerBullets.remove(bullet);
             }else{
+                decideEnemyDieAndBoom(bullet);
                 bullet.updateGame();
                 bullet.onDraw(mCanvas);
             }
@@ -187,6 +207,30 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             mPlayer.setBulletType(DrawPlayerBullet.PLAYER_BULLET_D);
         }else if(mTempBulletType == 100){
             mPlayer.setBulletType(DrawPlayerBullet.PLAYER_BULLET_C);
+        }
+    }
+    /**
+     * 判断主角子弹和敌机是否碰撞是否死亡
+     */
+    private void decideEnemyDieAndBoom(DrawPlayerBullet b){
+        List<DrawEnemy> drawEnemies = mLevel.getEnemyList();
+        for (int j = 0; j < drawEnemies.size(); j++) {
+            DrawEnemy tem = drawEnemies.get(j);
+            if(tem.isCollisionWith(b)){
+                mPlayerBullets.remove(b);//该子弹失效 清除
+                //击中的音乐声效
+                GameSoundPool.getInstance(getContext()).play(GameSoundPool.ENEMYCLEARA,10);
+                if(tem.isDead()){
+                    if(tem.getEnemyType()==DrawEnemy.TYPE_T||tem.getEnemyType()==DrawEnemy.TYPE_U||tem.getEnemyType()==DrawEnemy.TYPE_V||tem.getEnemyType()==DrawEnemy.TYPE_W){
+                        mBooms.add(new DrawBoom(getContext(),mBoom01 ,tem.getEnemyX()+tem.getWidth()/2,tem.getEnemyY()+tem.getWidth()/4,20,false,DrawBoom.TYPE_B));
+                    }else{
+                        mBooms.add(new DrawBoom(getContext(),mEneyBoom01,tem.getEnemyX()-tem.getWidth()/2,tem.getEnemyY()+tem.getHeight()/4,20,DrawBoom.TYPE_A));
+                    }
+                    //击中的音乐声效
+                    GameSoundPool.getInstance(getContext()).play(GameSoundPool.ENEMYCLEARC, 2);
+                    drawEnemies.remove(tem);
+                }
+            }
         }
     }
     /**
@@ -214,6 +258,27 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                     mLevel.addEnemyBullet(en);
                     countEnemyBullet=0;
                 }
+//                if(mPlayer.isCollisionWith(en)){//主角与敌机碰撞 主角掉血 敌机灭亡
+//                    collPlayerHp(3);
+//                    if(!mPlayer.unmatch){
+//                        mBooms.add(new DrawBoom(getContext(),mEneyBoom01 ,en.getEnemyX(),en.getEnemyY(),20,DrawBoom.TYPE_A));
+//                        mLevel.getEnemyList().remove(en);//清除
+//                    }
+//                }
+            }
+        }
+    }
+    /**
+     * 敌机死亡爆炸效果
+     */
+    private void drawBoomDecideOver(){
+        for (int i = 0; i < mBooms.size(); i++) {//绘制死亡爆炸效果
+            DrawBoom boom = mBooms.get(i);
+            if(boom.isEnd()){//已经爆炸
+                mBooms.remove(boom);//移除
+            }else{
+                boom.updateGame();
+                boom.onDraw(mCanvas);
             }
         }
     }

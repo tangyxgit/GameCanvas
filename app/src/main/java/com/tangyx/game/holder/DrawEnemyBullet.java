@@ -148,4 +148,19 @@ public class DrawEnemyBullet extends DrawGame {
     public boolean isDead() {
         return isDead;
     }
+
+    public float getBulletX() {
+        return mBulletX;
+    }
+
+    public float getBulletY() {
+        return mBulletY;
+    }
+
+    public int getWidth(){
+        return mEnemyBullet.getWidth();
+    }
+    public int getHeight(){
+        return mEnemyBullet.getHeight();
+    }
 }
