@@ -1,10 +1,17 @@
 package com.tangyx.game.holder;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -32,6 +39,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     private final static int ING=0;//正在玩
     private final static int READY=1;//第一次进来，游戏加载状态到准备完成。
     private final static int PAUSE=2;//暂停，手离开了屏幕
+    private final static int OVER=3;//主角死亡 游戏结束
     private static int GAME_STATE=READY;//默认加载状态到准备完成
     /**
      * surface的控制器
@@ -59,6 +67,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     private List<DrawPlayerBullet> mPlayerBullets;//主角子弹的集合，可以理解为弹夹
     private int mCountPlayerBullet;//子弹发出的速度，间隔多久加入一颗子弹。
     private int mTempBulletType=0;//模拟子弹类型的变化
+    private Vibrator mVibrator;//主角被击中震动手机
     /**
      * 游戏主角
      */
@@ -75,13 +84,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
      * 敌机死亡爆炸效果
      */
     private static Bitmap mBoom01;
-    private static Bitmap[] mEneyBoom01;
-    private static Bitmap[] mEneyBoom02;
+    private static Bitmap[] mEnemyBoom01;
+    private static Bitmap[] mEnemyBoom02;
     private List<DrawBoom> mBooms;
     /**
      * 是否暂停，或者退出了
      */
     private boolean isRun=true;
+    private AlertDialog.Builder mDialog;
 
     public GameView(Context context,int player,String background,int cos) {
         super(context);
@@ -96,6 +106,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
      * 初始化资源
      */
     private void initGame(){
+        GAME_STATE = READY;
         //初始化画笔
         mPaint = new Paint();
         mPaint.setColor(Color.WHITE);
@@ -113,9 +124,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         //初始化爆炸资源
         mBoom01 = BitmapUtils.ReadBitMap(getContext(), R.drawable.boom_1);
         Bitmap temp = BitmapUtils.ReadBitMap(getContext(), R.drawable.boom_0);
-        mEneyBoom01 = BitmapUtils.widthSplit(temp,6);
+        mEnemyBoom01 = BitmapUtils.widthSplit(temp,6);
         temp = BitmapUtils.ReadBitMap(getContext(), R.drawable.boom_2);
-        mEneyBoom02 = BitmapUtils.widthSplit(temp,6);
+        mEnemyBoom02 = BitmapUtils.widthSplit(temp,6);
         mBooms = new ArrayList<>();
         //初始化关卡
         mLevel = new Level1(getContext(),mPlayer);
@@ -123,6 +134,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         GameSoundPool.getInstance(getContext()).addMusic(GameSoundPool.ENEMYCLEARA, R.raw.enemyclear1,1);
         GameSoundPool.getInstance(getContext()).addMusic(GameSoundPool.ENEMYCLEARB, R.raw.enemyclear2,1);
         GameSoundPool.getInstance(getContext()).addMusic(GameSoundPool.ENEMYCLEARC, R.raw.enemydie,1);
+        mVibrator = (Vibrator) getContext().getSystemService(Service.VIBRATOR_SERVICE);
     }
 
     /**
@@ -144,12 +156,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                 addPlayerBullet();
                 dieEnemyBullet();
                 drawBoomDecideOver();
+                if(mPlayer.getLife()<=0){//主角死亡 游戏结束
+                    GAME_STATE = OVER;
+                }
                 break;
             case READY:
                 mPlayer.onDrawCollect(mCanvas,getContext().getString(R.string.reading));
                 break;
             case PAUSE:
                 mPlayer.onDrawCollect(mCanvas,getContext().getString(R.string.conution));
+                break;
+            case OVER:
+                isRun = false;
+                mPlayer.setLife(0);
+                handler.sendEmptyMessage(0);
                 break;
         }
     }
@@ -224,7 +244,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                     if(tem.getEnemyType()==DrawEnemy.TYPE_T||tem.getEnemyType()==DrawEnemy.TYPE_U||tem.getEnemyType()==DrawEnemy.TYPE_V||tem.getEnemyType()==DrawEnemy.TYPE_W){
                         mBooms.add(new DrawBoom(getContext(),mBoom01 ,tem.getEnemyX()+tem.getWidth()/2,tem.getEnemyY()+tem.getWidth()/4,20,false,DrawBoom.TYPE_B));
                     }else{
-                        mBooms.add(new DrawBoom(getContext(),mEneyBoom01,tem.getEnemyX()-tem.getWidth()/2,tem.getEnemyY()+tem.getHeight()/4,20,DrawBoom.TYPE_A));
+                        mBooms.add(new DrawBoom(getContext(), mEnemyBoom01,tem.getEnemyX()-tem.getWidth()/2,tem.getEnemyY()+tem.getHeight()/4,20,DrawBoom.TYPE_A));
                     }
                     //击中的音乐声效
                     GameSoundPool.getInstance(getContext()).play(GameSoundPool.ENEMYCLEARC, 2);
@@ -258,15 +278,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                     mLevel.addEnemyBullet(en);
                     countEnemyBullet=0;
                 }
-//                if(mPlayer.isCollisionWith(en)){//主角与敌机碰撞 主角掉血 敌机灭亡
-//                    collPlayerHp(3);
-//                    if(!mPlayer.unmatch){
-//                        mBooms.add(new DrawBoom(getContext(),mEneyBoom01 ,en.getEnemyX(),en.getEnemyY(),20,DrawBoom.TYPE_A));
-//                        mLevel.getEnemyList().remove(en);//清除
-//                    }
-//                }
+                if(mPlayer.isCollisionWith(en)){//主角与敌机碰撞 主角掉血 敌机灭亡
+                    collPlayerLife(3);
+                    mBooms.add(new DrawBoom(getContext(), mEnemyBoom01,en.getEnemyX(),en.getEnemyY(),20,DrawBoom.TYPE_A));
+                    mLevel.getEnemyList().remove(en);//清除
+                }
             }
         }
+    }
+
+    /**
+     * 主角掉血
+     */
+    private void collPlayerLife(int die){
+        mPlayer.setLife(mPlayer.getLife()-die);
+        mVibrator.vibrate(200);
     }
     /**
      * 敌机死亡爆炸效果
@@ -292,8 +318,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             if(bullet.isDead()){
                 list.remove(bullet);//清除
             }else{
-                bullet.updateGame();
-                bullet.onDraw(mCanvas);
+                if(mPlayer.isCollisionWith(bullet)){//主角与敌机子弹碰撞 主角掉血
+                    collPlayerLife(1);
+                    mLevel.getEnemyBullets().remove(bullet);//子弹失效
+                }else{
+                    bullet.updateGame();
+                    bullet.onDraw(mCanvas);
+                }
             }
         }
     }
@@ -394,9 +425,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                 if(mCanvas!=null){
                     mHolder.unlockCanvasAndPost(mCanvas);
                 }
-                if(end-start<15){
+                if(end-start<30){
                     try {
-                        Thread.sleep(Math.max(0,15-(end - start)));
+                        Thread.sleep(Math.max(0,30-(end - start)));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -405,4 +436,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
 
         }
     }
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(mDialog==null){
+                mDialog = new AlertDialog.Builder(getContext());
+                mDialog.setMessage("战机被摧毁，游戏结束");
+                mDialog.setTitle("提示");
+                mDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((Activity)getContext()).finish();
+                    }
+                });
+                mDialog.setCancelable(true);
+                mDialog.show();
+            }
+        }
+    };
 }

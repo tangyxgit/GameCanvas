@@ -3,6 +3,7 @@ package com.tangyx.game.holder;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -25,6 +26,10 @@ public class DrawPlayer extends DrawGame {
     private float mPlayerX;
     private float mPlayerY;
     /**
+     * 主角血量
+     */
+    private float mLife =20;
+    /**
      * 主角的控制位置
      */
     private Bitmap mCollect;
@@ -35,7 +40,8 @@ public class DrawPlayer extends DrawGame {
     /**
      * 是否被击中，被击中后闪烁 并且一定时间内无敌。
      */
-    public boolean isCollision=true;
+    private boolean isCollision=true;
+    private int noCollisionCount;
     /**
      * 尾气喷气
      */
@@ -78,9 +84,20 @@ public class DrawPlayer extends DrawGame {
 
     @Override
     void onDraw(Canvas canvas) {
-        mPaint.setAlpha(255);
+        if(isCollision && noCollisionCount%2==0){
+            mPaint.setAlpha(100);
+        }else{
+            mPaint.setAlpha(255);
+        }
         canvas.drawBitmap(mPlayer,mPlayerX,mPlayerY,mPaint);
+        mPaint.setAlpha(255);
         canvas.drawBitmap(getBlowAnimation(), (mPlayerX-mPlayerBlow.getWidth()/4),mPlayerY+mPlayerBlow.getHeight()/1.5f,mPaint);
+        //绘制血条
+        int screenW = ScreenUtils.getScreenWidth(getContext());
+        mPaint.setColor(Color.WHITE);
+        int lifeH = SizeUtils.dp2px(getContext(),20);
+        mPaint.setStrokeWidth(SizeUtils.dp2px(getContext(),3));
+        canvas.drawLine(screenW/6, lifeH,screenW/5+ mLife *50,lifeH,mPaint);
     }
 
     /**
@@ -131,7 +148,13 @@ public class DrawPlayer extends DrawGame {
 
     @Override
     void updateGame() {
-
+        if(isCollision){
+            noCollisionCount++;
+            if(noCollisionCount>=60){
+                isCollision=false;
+                noCollisionCount=0;
+            }
+        }
     }
 
     /**
@@ -184,6 +207,14 @@ public class DrawPlayer extends DrawGame {
         }else{
             return false;
         }
+    }
+
+    public float getLife() {
+        return mLife;
+    }
+
+    public void setLife(float mLife) {
+        this.mLife = mLife;
     }
 
     public void setPlayerX(float mPlayerX) {
